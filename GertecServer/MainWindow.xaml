@@ -3,10 +3,279 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:GertecServer"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:GertecServer" xmlns:Page="clr-namespace:GertecServer.Views"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Style="{StaticResource MaterialDesignWindow}"
+        Title="MainWindow" Height="450" Width="800" WindowState="Maximized">
     <Grid>
+        <Grid x:Name="MainGrid">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition x:Name="Column0GridMain" Width="50"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Background="Blue">
+                <StackPanel Background="Blue">
+                    <Button Style="{DynamicResource MaterialDesignIconButton}" IsEnabled="False" VerticalAlignment="Center" x:Name="Button_CMD" Click="Button_CMD_Click" Height="40">
+                        <Button.Content>
+                            <materialDesign:Transitioner SelectedIndex="0" Name="TransitionerCMD">
+                                <materialDesign:TransitionerSlide>
+                                    <materialDesign:TransitionerSlide.ForwardWipe>
+                                        <materialDesign:FadeWipe/>
+                                    </materialDesign:TransitionerSlide.ForwardWipe>
+                                    <materialDesign:TransitionerSlide.BackwardWipe>
+                                        <materialDesign:FadeWipe/>
+                                    </materialDesign:TransitionerSlide.BackwardWipe>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                        <materialDesign:PackIcon Kind="Barcode" Foreground="White" Width="30" Height="30"/>
+                                    </StackPanel>
+                                </materialDesign:TransitionerSlide>
+                                <materialDesign:TransitionerSlide>
+                                    <materialDesign:TransitionerSlide.ForwardWipe>
+                                        <materialDesign:FadeWipe/>
+                                    </materialDesign:TransitionerSlide.ForwardWipe>
+                                    <materialDesign:TransitionerSlide.BackwardWipe>
+                                        <materialDesign:FadeWipe/>
+                                    </materialDesign:TransitionerSlide.BackwardWipe>
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                                        <materialDesign:PackIcon Kind="Database" Foreground="White" Width="30" Height="30"/>
+                                    </StackPanel>
+                                </materialDesign:TransitionerSlide>
+                            </materialDesign:Transitioner>
+                        </Button.Content>
+                    </Button>
+                    <Button Style="{DynamicResource MaterialDesignFlatButton}" VerticalAlignment="Center" x:Name="Button_Cadastro" Click="Button_Cadastro_Click">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal" Margin="-6">
+                                <materialDesign:PackIcon Kind="BoxAdd" Foreground="White" Width="30" Height="30"/>
+                                <TextBlock Text="Cadastrar" Foreground="White" Margin="5,0,0,0" VerticalAlignment="Center" Visibility="Visible" x:Name="TextBlock_Cadastro"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                    <Button Style="{DynamicResource MaterialDesignFlatButton}" Margin="0,5,0,5" VerticalAlignment="Center" x:Name="Button_Editar" Click="Button_Editar_Click">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal" Margin="-6">
+                                <materialDesign:PackIcon Kind="BoxEdit" Foreground="White" Width="30" Height="30"/>
+                                <TextBlock Text="Editar" Foreground="White" Margin="5,0,0,0" VerticalAlignment="Center" Visibility="Visible" x:Name="TextBlock_Editar"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                    <Button Style="{DynamicResource MaterialDesignFlatButton}" VerticalAlignment="Center" x:Name="Button_Consulta" Click="Button_Consulta_Click">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal" Margin="-6">
+                                <materialDesign:PackIcon Kind="Magnify" Foreground="White" Width="30" Height="30"/>
+                                <TextBlock Text="Consultar" Foreground="White" Margin="5,0,0,0" VerticalAlignment="Center" Visibility="Visible" x:Name="TextBlock_Consulta"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                    <Button Style="{DynamicResource MaterialDesignFlatButton}" Margin="0,5,0,5" VerticalAlignment="Center" x:Name="Button_Excluir" Click="Button_Excluir_Click">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal" Margin="-6">
+                                <materialDesign:PackIcon Kind="BoxRemove" HorizontalAlignment="Left" Foreground="White" Width="30" Height="30"/>
+                                <TextBlock Text="Excluir" Foreground="White" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
 
+                <StackPanel VerticalAlignment="Bottom">
+                    <Button Style="{DynamicResource MaterialDesignFlatButton}" Margin="0,5,0,5" VerticalAlignment="Center" x:Name="Button_Config" Click="Button_Config_Click">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal" Margin="-6">
+                                <materialDesign:PackIcon Kind="Gear" HorizontalAlignment="Left" Foreground="White" Width="30" Height="30"/>
+                                <TextBlock Text="Configurações" Foreground="White" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                    <Button Style="{DynamicResource MaterialDesignFlatButton}" Margin="0,5,0,5" VerticalAlignment="Center" x:Name="Button_Sair" Click="Button_Sair_Click">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal" Margin="-6">
+                                <materialDesign:PackIcon Kind="ExitToApp" Foreground="White" Width="30" Height="30"/>
+                                <TextBlock Text="Sair" Foreground="White" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+            </Grid>
+            <materialDesign:Transitioner Grid.Column="1" SelectedIndex="0" Name="TransitionerMain">
+                <materialDesign:TransitionerSlide>
+                    <materialDesign:TransitionerSlide.ForwardWipe>
+                        <materialDesign:SlideOutWipe/>
+                    </materialDesign:TransitionerSlide.ForwardWipe>
+                    <materialDesign:TransitionerSlide.BackwardWipe>
+                        <materialDesign:SlideOutWipe/>
+                    </materialDesign:TransitionerSlide.BackwardWipe>
+                    <DataGrid Grid.Column="1" x:Name="DataGridProdutos" ItemsSource="{Binding Produtos}" AutoGenerateColumns="False" IsReadOnly="True"
+                        MouseDoubleClick="DataGridProdutos_MouseDoubleClick">
+                        <DataGrid.Columns>
+                            <materialDesign:DataGridTextColumn Header="Código" Binding="{Binding Codigo}"/>
+                            <materialDesign:DataGridTextColumn Header="Código de Barras" Width="200" Binding="{Binding CodBarra}"/>
+                            <materialDesign:DataGridTextColumn Header="Descrição" Width="*" Binding="{Binding Descricao}"/>
+                            <materialDesign:DataGridTextColumn Header="Preço 1" Binding="{Binding Preco1}"/>
+                            <materialDesign:DataGridTextColumn Header="Preço 2" Binding="{Binding Preco2}"/>
+                            <DataGridCheckBoxColumn Header="COB" Binding="{Binding COB}"/>
+                        </DataGrid.Columns>
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Adicionar" Name="Context_Add" Click="Context_Add_Click">
+                                    <MenuItem.Icon>
+                                        <materialDesign:PackIcon Kind="BoxAdd"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="Editar" Name="Context_Edit" Click="Context_Edit_Click">
+                                    <MenuItem.Icon>
+                                        <materialDesign:PackIcon Kind="BoxEdit"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="Excluir" Name="Context_Excluir" Click="Context_Excluir_Click">
+                                    <MenuItem.Icon>
+                                        <materialDesign:PackIcon Kind="BoxRemove"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <Separator/>
+                                <MenuItem Header="Filtrar" Name="Context_Filtrar" Click="Context_Filtrar_Click">
+                                    <MenuItem.Icon>
+                                        <materialDesign:PackIcon Kind="FilterVariant"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+                    </DataGrid>
+                </materialDesign:TransitionerSlide>
+                <materialDesign:TransitionerSlide>
+                    <materialDesign:TransitionerSlide.ForwardWipe>
+                        <materialDesign:SlideOutWipe/>
+                    </materialDesign:TransitionerSlide.ForwardWipe>
+                    <materialDesign:TransitionerSlide.BackwardWipe>
+                        <materialDesign:SlideOutWipe/>
+                    </materialDesign:TransitionerSlide.BackwardWipe>
+                    <Frame Source="Views/Terminal.xaml"/>
+                </materialDesign:TransitionerSlide>
+            </materialDesign:Transitioner>
+        </Grid>
+        <materialDesign:DialogHost IsOpen="False" CloseOnClickAway="False" x:Name="Dialog_AddEdit">
+            <materialDesign:DialogHost.DialogContent>
+                <materialDesign:Card Width="350" Height="260">
+                    <Grid Margin="10">
+                        <StackPanel>
+                            <TextBlock Text="Cadastro de Produto" FontSize="20" FontWeight="Bold" Margin="0,0,0,10" Name="Text_DialogAddOrEdit"/>
+                            <TextBox Style="{DynamicResource MaterialDesignOutlinedTextBox}" materialDesign:HintAssist.Hint="Descrição" Name="TextBox_DescricaoAOE"
+                                     Padding="10"/>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBox Style="{DynamicResource MaterialDesignOutlinedTextBox}" materialDesign:HintAssist.Hint="Código" Name="TextBox_CodigoAOE"
+                                         Padding="10" Width="100" Margin="0,10,10,0"/>
+                                <TextBox Style="{DynamicResource MaterialDesignOutlinedTextBox}" Padding="10" Margin="0,10,0,0" Width="220" Name="TextBox_CodigoBarrasAOE"
+                                         materialDesign:HintAssist.Hint="Código de Barras"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                                <TextBox Style="{DynamicResource MaterialDesignOutlinedTextBox}" materialDesign:HintAssist.Hint="Preço 1" Name="TextBox_Preco1AOE"
+                                         Padding="10" Width="150" Margin="0,5,10,0" materialDesign:TextFieldAssist.PrefixText="R$"/>
+                                <TextBox Style="{DynamicResource MaterialDesignOutlinedTextBox}" materialDesign:TextFieldAssist.PrefixText="R$" Name="TextBox_Preco2AOE"
+                                         Padding="10" Width="150" Margin="0,5,0,0" materialDesign:HintAssist.Hint="Preço 2"/>
+
+                            </StackPanel>
+                            <Grid>
+                                <StackPanel Margin="10,8,0,0">
+                                    <TextBlock Text="Considerar na leitura"/>
+                                    <RadioButton Content="Código" Margin="0,0,10,0" Name="Radio_Codigo"/>
+                                    <RadioButton Content="Cód de Barras" IsChecked="True" Name="Radio_CodigoBarras"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                                    <Button Style="{DynamicResource MaterialDesignFlatButton}" Content="Cancelar" HorizontalAlignment="Right" Margin="0,0,8,0" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"/>
+                                    <Button Style="{DynamicResource MaterialDesignRaisedButton}" Content="Salvar" HorizontalAlignment="Right" Width="80" Name="Button_DialogSalvar" Click="Button_DialogSalvar_Click" />
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Grid>
+                </materialDesign:Card>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
+        <materialDesign:DialogHost IsOpen="False" CloseOnClickAway="True" x:Name="Dialog_Excluir">
+            <materialDesign:DialogHost.DialogContent>
+                <materialDesign:Card>
+                    <Grid Margin="10">
+                        <StackPanel>
+                            <TextBlock Text="Excluir" FontSize="20" FontWeight="Bold"/>
+                            <Separator Margin="10,5,10,5"/>
+                            <TextBlock Text="Você deseja realmente excluir o produto de código ####?" Name="Text_DialogExcluir" Margin="5"/>
+                            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Margin="0,8,0,0">
+                                <Button Style="{DynamicResource MaterialDesignFlatButton}" Content="Não" Margin="0,0,10,0" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"/>
+                                <Button Style="{DynamicResource MaterialDesignRaisedButton}" Content="Sim" Name="Button_ExcluirDialog" Click="Button_ExcluirDialog_Click"/> 
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </materialDesign:Card>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
+        <materialDesign:DialogHost IsOpen="False" CloseOnClickAway="True" x:Name="Dialog_Filtrar">
+            <materialDesign:DialogHost.DialogContent>
+                <materialDesign:Card>
+                    <Grid Margin="10">
+                        <StackPanel>
+                            <TextBlock Text="Filtrar Produtos" FontSize="20" FontWeight="Bold"/>
+                            <Separator Margin="10, 5, 10, 5"/>
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox Style="{DynamicResource MaterialDesignFilterChipOutlineCheckBox}" Checked="Chip_Codigo_Checked" Unchecked="Chip_Codigo_Unchecked" Name="Chip_Codigo" Content="Código" Margin="0,0,10,0"/>
+                                <CheckBox Style="{DynamicResource MaterialDesignFilterChipOutlineCheckBox}" Checked="Chip_CodigoBarras_Checked" Unchecked="Chip_CodigoBarras_Unchecked" Name="Chip_CodigoBarras" Content="Código de Barras" Margin="0,0,10,0"/>
+                                <CheckBox Style="{DynamicResource MaterialDesignFilterChipOutlineCheckBox}" Checked="Chip_Descricao_Checked" Unchecked="Chip_Descricao_Unchecked" Name="Chip_Descricao" Content="Descrição" Margin="0,0,10,0"/>
+                                <CheckBox Style="{DynamicResource MaterialDesignFilterChipOutlineCheckBox}" Checked="Chip_Preco1_Checked" Unchecked="Chip_Preco1_Unchecked" Name="Chip_Preco1" Content="Preço 1" Margin="0,0,10,0"/>
+                                <CheckBox Style="{DynamicResource MaterialDesignFilterChipOutlineCheckBox}" Checked="Cihp_Preco2_Checked" Unchecked="Cihp_Preco2_Unchecked" Name="Cihp_Preco2" Content="Preço 2" Margin="0,0,10,0"/>
+                                <CheckBox Style="{DynamicResource MaterialDesignFilterChipOutlineCheckBox}" Checked="Chip_COB_Checked" Unchecked="Chip_COB_Unchecked" Name="Chip_COB" Content="COB"/>
+                            </StackPanel>
+                            <Separator Margin="10, 5, 10, 10"/>
+                            <TextBox Style="{DynamicResource MaterialDesignOutlinedTextBox}" materialDesign:HintAssist.Hint="Descrição" IsEnabled="False"
+                                        Padding="10" Width="auto" x:Name="TextBox_DescricaoFiltro"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBox Style="{DynamicResource MaterialDesignOutlinedTextBox}" materialDesign:HintAssist.Hint="Código" IsEnabled="False"
+                                            Padding="10" Margin="0,10,10,0" Width="213" x:Name="TextBox_CodigoFiltro"/>
+                                <TextBox Style="{DynamicResource MaterialDesignOutlinedTextBox}" Width="213" Padding="10" IsEnabled="False"
+                                         Margin="0,10,0,0" materialDesign:HintAssist.Hint="Código de Barras" x:Name="TextBox_CodigoBFiltro"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="0,10,0,0" HorizontalAlignment="Center">
+                                <TextBox Style="{DynamicResource MaterialDesignOutlinedTextBox}" materialDesign:HintAssist.Hint="Preço 1" IsEnabled="False"
+                                            Padding="10" Width="213" Margin="0,0,10,0" materialDesign:TextFieldAssist.PrefixText="R$" x:Name="TextBox_Preco1Filtro"/>
+                                <TextBox Style="{DynamicResource MaterialDesignOutlinedTextBox}" materialDesign:TextFieldAssist.PrefixText="R$" IsEnabled="False"
+                                            Padding="10" Width="213" materialDesign:HintAssist.Hint="Preço 2" x:Name="TextBox_Preco2Filtro"/>
+                                <StackPanel Margin="10,0,0,0" Name="COBFilter" IsEnabled="False">
+                                    <TextBlock Text="Considerar na leitura"/>
+                                    <StackPanel Orientation="Horizontal">
+                                        <RadioButton Content="Código" Margin="0,0,10,0" Name="Radio_CodigoFiltro"/>
+                                        <RadioButton Content="Código de Barras" IsChecked="True" Name="Radio_CodigoBarrasFiltro"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
+                                <Button Style="{DynamicResource MaterialDesignFlatButton}" Content="Fechar" Margin="0,0,10,0"/>
+                                <Button Style="{DynamicResource MaterialDesignRaisedButton}" Content="Filtrar" x:Name="Button_Filtrar" Click="Button_Filtrar_Click"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </materialDesign:Card>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
+        <materialDesign:DialogHost CloseOnClickAway="True" x:Name="Dialog_Config">
+            <materialDesign:DialogHost.DialogContent>
+                <Grid>
+                    <materialDesign:Card Width="350" Height="160">
+                        <Grid Margin="10">
+                            <StackPanel>
+                                <TextBlock Text="Configurações" FontSize="20" FontWeight="Bold"/>
+                                <Separator Margin="0,5,0,10"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBox Style="{DynamicResource MaterialDesignOutlinedTextBox}" Width="270" Padding="10" materialDesign:HintAssist.Hint="Caminho do Banco de Dados"
+                                             x:Name="TextBox_PathDB" IsEnabled="True" IsReadOnly="True"/>
+                                    <Button Style="{DynamicResource MaterialDesignIconButton}" Margin="10,0,0,0" x:Name="Button_FolderDB" Click="Button_FolderDB_Click">
+                                        <materialDesign:PackIcon Kind="FolderOpen" Foreground="Black" />
+                                    </Button>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
+                                    <Button Style="{DynamicResource MaterialDesignFlatButton}" Content="Fechar" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                    </materialDesign:Card>
+                </Grid>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
     </Grid>
 </Window>
