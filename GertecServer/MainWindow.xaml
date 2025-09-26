@@ -76,10 +76,18 @@
                             </StackPanel>
                         </Button.Content>
                     </Button>
+                    <Button Style="{DynamicResource MaterialDesignFlatButton}" Margin="0,5,0,5" VerticalAlignment="Center" Name="Button_Import" Click="Button_Import_Click">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal" Margin="-6">
+                                <materialDesign:PackIcon Kind="DatabaseImport" HorizontalAlignment="Left" Foreground="White" Width="30" Height="30"/>
+                                <TextBlock Text="Importar" Foreground="White" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
                 </StackPanel>
 
                 <StackPanel VerticalAlignment="Bottom">
-                    <Button Style="{DynamicResource MaterialDesignFlatButton}" Margin="0,5,0,5" VerticalAlignment="Center" x:Name="Button_Config" Click="Button_Config_Click">
+                    <Button Style="{DynamicResource MaterialDesignFlatButton}" Margin="0,5,0,5" VerticalAlignment="Center" x:Name="Button_Config" IsEnabled="False" Click="Button_Config_Click">
                         <Button.Content>
                             <StackPanel Orientation="Horizontal" Margin="-6">
                                 <materialDesign:PackIcon Kind="Gear" HorizontalAlignment="Left" Foreground="White" Width="30" Height="30"/>
@@ -251,6 +259,45 @@
                         </StackPanel>
                     </Grid>
                 </materialDesign:Card>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
+        <materialDesign:DialogHost IsOpen="False" CloseOnClickAway="False" Name="Dialog_Importar">
+            <materialDesign:DialogHost.DialogContent>
+                <Grid>
+                    <materialDesign:Card Width="350" Height="200">
+                        <Grid Margin="10">
+                            <StackPanel>
+                                <TextBlock Text="Importar Produtos" FontSize="20" FontWeight="Bold"/>
+                                <Separator Margin="0,5,0,10"/>
+                                <TextBlock Text="Selecione o arquivo XLSX para importar os produtos." TextWrapping="Wrap"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,15,0,0">
+                                    <TextBox Style="{DynamicResource MaterialDesignOutlinedTextBox}" Width="270" Padding="10" materialDesign:HintAssist.Hint="Caminho do Arquivo"
+                                             x:Name="TextBox_PathFile" IsEnabled="True" IsReadOnly="True"/>
+                                    <Button Style="{DynamicResource MaterialDesignIconButton}" Margin="10,0,0,0" x:Name="Button_FolderFile" Click="Button_FolderFile_Click">
+                                        <materialDesign:PackIcon Kind="FolderOpen" Foreground="Black" />
+                                    </Button>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
+                                    <Button Style="{DynamicResource MaterialDesignFlatButton}" Content="Fechar" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"/>
+                                    <Button Style="{DynamicResource MaterialDesignRaisedButton}" Content="Importar" Margin="10,0,0,0" x:Name="Button_ImportarXLSX" Click="Button_ImportarXLSX_Click"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                    </materialDesign:Card>
+                </Grid>
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
+        <materialDesign:DialogHost IsOpen="False" CloseOnClickAway="False" Name="Dialog_ImportarLoad" >
+            <materialDesign:DialogHost.DialogContent>
+                <StackPanel Margin="24" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="Importando produtos..." Margin="0,0,0,0" FontWeight="Bold" FontSize="16"/>
+                    <Separator Margin="0,5,0,10"/>
+                    <TextBlock Text="Começando a importação..." HorizontalAlignment="Center" TextAlignment="Center" Margin="10,0,10,0" Name="TextBlock_StatusImp" Width="200" TextWrapping="Wrap"/>
+                    <ProgressBar Style="{StaticResource MaterialDesignCircularProgressBar}" IsIndeterminate="True" Height="10" Margin="0,10,0,15" Name="ProgressBar_Imp"/>
+                    <TextBlock Text="0%" HorizontalAlignment="Center" Name="TextBlock_Porcentagem" Visibility="Hidden"/>
+                    <Button Content="Cancelar" Width="120" Margin="0,10,0,0" Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}" Name="Button_CancelLoad"
+                            Click="Button_CancelLoad_Click"/>
+                </StackPanel>
             </materialDesign:DialogHost.DialogContent>
         </materialDesign:DialogHost>
         <materialDesign:DialogHost CloseOnClickAway="True" x:Name="Dialog_Config">
