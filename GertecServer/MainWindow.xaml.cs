@@ -541,25 +541,19 @@ namespace GertecServer
         // Convert from Brazilian format to decimal
         private decimal ParseBrazilianCurrency(string value)
         {
-            try
+            // Remove "R$", spaces, and thousand separators (.)
+            string cleanValue = value.Replace("R$", "").Replace(" ", "").Replace(".", "").Trim();
+            // Replace comma with period for decimal separator
+            cleanValue = cleanValue.Replace(",", ".");
+            if (decimal.TryParse(cleanValue, System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.InvariantCulture, out decimal result))
             {
-                // Remove "R$", spaces, and thousand separators (.)
-                string cleanValue = value.Replace("R$", "").Replace(" ", "").Replace(".", "").Trim();
-                // Replace comma with period for decimal separator
-                cleanValue = cleanValue.Replace(",", ".");
-                if (decimal.TryParse(cleanValue, System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.InvariantCulture, out decimal result))
-                {
-                    return result;
-                }
-                throw new FormatException($"Não foi possível converter '{value}' para decimal.");
+                return result;
             }
-            catch (Exception ex)
-            {
-                throw new FormatException($"Erro ao converter preço '{value}': {ex.Message}", ex);
-            }
+            throw new FormatException($"Não foi possível converter '{value}' para decimal. Formato esperado: R$ #.###,##");
         }
 
         // Try parse user input price (handles both comma and period as decimal separators)
+        // Note: This method expects comma (,) as the decimal separator
         private bool TryParseUserInputPrice(string input, out decimal result)
         {
             string cleanValue = input.Replace(".", "").Replace(",", ".");
@@ -569,8 +563,16 @@ namespace GertecServer
         // Convert Brazilian format to editable format for text boxes
         private string FormatToEditablePrice(string brazilianPrice)
         {
-            decimal value = ParseBrazilianCurrency(brazilianPrice);
-            return value.ToString("F2").Replace(".", ",");
+            try
+            {
+                decimal value = ParseBrazilianCurrency(brazilianPrice);
+                return value.ToString("F2").Replace(".", ",");
+            }
+            catch (FormatException ex)
+            {
+                MessageBox.Show($"Erro ao converter preço: {ex.Message}", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                return "0,00";
+            }
         }
 
         // Convert from import format (0.00) to Brazilian format
