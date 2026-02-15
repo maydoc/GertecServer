@@ -58,8 +58,8 @@ namespace GertecServer
                     Codigo = reader.GetString(0),
                     CodBarra = reader.GetString(1),
                     Descricao = reader.GetString(2),
-                    Preco1 = reader.GetDecimal(3),
-                    Preco2 = reader.GetDecimal(4),
+                    Preco1 = reader.GetString(3),
+                    Preco2 = reader.GetString(4),
                     COB = cob
                 });
             }
@@ -107,8 +107,9 @@ namespace GertecServer
                 TextBox_CodigoAOE.Text = produtoSelecionado.Codigo;
                 TextBox_CodigoAOE.IsEnabled = false;
                 TextBox_CodigoBarrasAOE.Text = produtoSelecionado.CodBarra;
-                TextBox_Preco1AOE.Text = produtoSelecionado.Preco1.ToString("F2");
-                TextBox_Preco2AOE.Text = produtoSelecionado.Preco2.ToString("F2");
+                // Remove "R$ " prefix for editing
+                TextBox_Preco1AOE.Text = produtoSelecionado.Preco1.Replace("R$", "").Trim();
+                TextBox_Preco2AOE.Text = produtoSelecionado.Preco2.Replace("R$", "").Trim();
                 switch (produtoSelecionado.COB)
                 {
                     case true:
@@ -163,8 +164,8 @@ namespace GertecServer
                         command.Parameters.AddWithValue("@Codigo", TextBox_CodigoAOE.Text);
                         command.Parameters.AddWithValue("@CodigoBarras", TextBox_CodigoBarrasAOE.Text);
                         command.Parameters.AddWithValue("@Descricao", TextBox_DescricaoAOE.Text);
-                        command.Parameters.AddWithValue("@Preco1", decimal.Parse(TextBox_Preco1AOE.Text));
-                        command.Parameters.AddWithValue("@Preco2", decimal.Parse(TextBox_Preco2AOE.Text));
+                        command.Parameters.AddWithValue("@Preco1", FormatToBrazilianCurrency(decimal.Parse(TextBox_Preco1AOE.Text)));
+                        command.Parameters.AddWithValue("@Preco2", FormatToBrazilianCurrency(decimal.Parse(TextBox_Preco2AOE.Text)));
                         command.Parameters.AddWithValue("@COB", Obter_BoolCOBInt(false));
                         switch (Obter_BoolCOBInt(false))
                         {
@@ -193,8 +194,8 @@ namespace GertecServer
                         command1.Parameters.AddWithValue("@Codigo", TextBox_CodigoAOE.Text);
                         command1.Parameters.AddWithValue("@CodigoBarras", TextBox_CodigoBarrasAOE.Text);
                         command1.Parameters.AddWithValue("@Descricao", TextBox_DescricaoAOE.Text);
-                        command1.Parameters.AddWithValue("@Preco1", decimal.Parse(TextBox_Preco1AOE.Text));
-                        command1.Parameters.AddWithValue("@Preco2", decimal.Parse(TextBox_Preco2AOE.Text));
+                        command1.Parameters.AddWithValue("@Preco1", FormatToBrazilianCurrency(decimal.Parse(TextBox_Preco1AOE.Text)));
+                        command1.Parameters.AddWithValue("@Preco2", FormatToBrazilianCurrency(decimal.Parse(TextBox_Preco2AOE.Text)));
                         command1.Parameters.AddWithValue("@COB", Obter_BoolCOBInt(false));
                         switch (Obter_BoolCOBInt(false))
                         {
@@ -227,8 +228,9 @@ namespace GertecServer
                 TextBox_CodigoAOE.Text = produtoSelecionado.Codigo;
                 TextBox_CodigoAOE.IsEnabled = false;
                 TextBox_CodigoBarrasAOE.Text = produtoSelecionado.CodBarra;
-                TextBox_Preco1AOE.Text = produtoSelecionado.Preco1.ToString("F2");
-                TextBox_Preco2AOE.Text = produtoSelecionado.Preco2.ToString("F2");
+                // Remove "R$ " prefix for editing
+                TextBox_Preco1AOE.Text = produtoSelecionado.Preco1.Replace("R$", "").Trim();
+                TextBox_Preco2AOE.Text = produtoSelecionado.Preco2.Replace("R$", "").Trim();
                 switch (produtoSelecionado.COB)
                 {
                     case true:
@@ -361,12 +363,12 @@ namespace GertecServer
             if (Chip_Preco1.IsChecked == true)
             {
                 if (filter.Length > 0) filter.Append(" AND ");
-                filter.Append($"Preco1 = {TextBox_Preco1Filtro.Text}");
+                filter.Append($"Preco1 = '{FormatToBrazilianCurrency(decimal.Parse(TextBox_Preco1Filtro.Text))}'");
             }
             if (Cihp_Preco2.IsChecked == true)
             {
                 if (filter.Length > 0) filter.Append(" AND ");
-                filter.Append($"Preco2 = {TextBox_Preco2Filtro.Text}");
+                filter.Append($"Preco2 = '{FormatToBrazilianCurrency(decimal.Parse(TextBox_Preco2Filtro.Text))}'");
             }
             if (Chip_COB.IsChecked == true)
             {
@@ -391,8 +393,8 @@ namespace GertecServer
                         Codigo = reader.GetString(0),
                         CodBarra = reader.GetString(1),
                         Descricao = reader.GetString(2),
-                        Preco1 = reader.GetDecimal(3),
-                        Preco2 = reader.GetDecimal(4),
+                        Preco1 = reader.GetString(3),
+                        Preco2 = reader.GetString(4),
                         COB = reader.GetInt16(5) == 1
                     });
                 }
@@ -443,8 +445,9 @@ namespace GertecServer
                 TextBox_CodigoAOE.Text = produtoSelecionado.Codigo;
                 TextBox_CodigoAOE.IsEnabled = false;
                 TextBox_CodigoBarrasAOE.Text = produtoSelecionado.CodBarra;
-                TextBox_Preco1AOE.Text = produtoSelecionado.Preco1.ToString("F2");
-                TextBox_Preco2AOE.Text = produtoSelecionado.Preco2.ToString("F2");
+                // Remove "R$ " prefix for editing
+                TextBox_Preco1AOE.Text = produtoSelecionado.Preco1.Replace("R$", "").Trim();
+                TextBox_Preco2AOE.Text = produtoSelecionado.Preco2.Replace("R$", "").Trim();
                 switch (produtoSelecionado.COB)
                 {
                     case true:
@@ -504,6 +507,28 @@ namespace GertecServer
                 default:
             }
             return int.MinValue;
+        }
+
+        // Convert decimal to Brazilian format: R$ #.###,##
+        private string FormatToBrazilianCurrency(decimal value)
+        {
+            return value.ToString("C2", new System.Globalization.CultureInfo("pt-BR"));
+        }
+
+        // Convert from Brazilian format to decimal
+        private decimal ParseBrazilianCurrency(string value)
+        {
+            // Remove "R$", spaces, and thousand separators (.)
+            string cleanValue = value.Replace("R$", "").Replace(" ", "").Replace(".", "").Trim();
+            // Replace comma with period for decimal separator
+            cleanValue = cleanValue.Replace(",", ".");
+            return decimal.Parse(cleanValue, System.Globalization.CultureInfo.InvariantCulture);
+        }
+
+        // Convert from import format (0.00) to Brazilian format
+        private string ConvertImportToBrazilian(double value)
+        {
+            return ((decimal)value).ToString("C2", new System.Globalization.CultureInfo("pt-BR"));
         }
         private void Button_CMD_Click(object sender, RoutedEventArgs e)
         {
@@ -664,8 +689,8 @@ namespace GertecServer
                                 updateCmd.Parameters.AddWithValue("@Codigo", codigo);
                                 updateCmd.Parameters.AddWithValue("@CodigoBarras", codigoBarras);
                                 updateCmd.Parameters.AddWithValue("@Descricao", descricao);
-                                updateCmd.Parameters.AddWithValue("@Preco1", preco1);
-                                updateCmd.Parameters.AddWithValue("@Preco2", preco2);
+                                updateCmd.Parameters.AddWithValue("@Preco1", ConvertImportToBrazilian(preco1));
+                                updateCmd.Parameters.AddWithValue("@Preco2", ConvertImportToBrazilian(preco2));
                                 updateCmd.ExecuteNonQuery();
                             }
                             else
@@ -676,8 +701,8 @@ namespace GertecServer
                                 insertCmd.Parameters.AddWithValue("@Codigo", codigo);
                                 insertCmd.Parameters.AddWithValue("@CodigoBarras", codigoBarras);
                                 insertCmd.Parameters.AddWithValue("@Descricao", descricao);
-                                insertCmd.Parameters.AddWithValue("@Preco1", preco1);
-                                insertCmd.Parameters.AddWithValue("@Preco2", preco2);
+                                insertCmd.Parameters.AddWithValue("@Preco1", ConvertImportToBrazilian(preco1));
+                                insertCmd.Parameters.AddWithValue("@Preco2", ConvertImportToBrazilian(preco2));
                                 insertCmd.Parameters.AddWithValue("@CodigoReal", codigo);
                                 insertCmd.ExecuteNonQuery();
                             }
