@@ -107,11 +107,9 @@ namespace GertecServer
                 TextBox_CodigoAOE.Text = produtoSelecionado.Codigo;
                 TextBox_CodigoAOE.IsEnabled = false;
                 TextBox_CodigoBarrasAOE.Text = produtoSelecionado.CodBarra;
-                // Convert from Brazilian format to editable format (e.g., "R$ 1.234,56" -> "1234,56")
-                decimal preco1Value = ParseBrazilianCurrency(produtoSelecionado.Preco1);
-                decimal preco2Value = ParseBrazilianCurrency(produtoSelecionado.Preco2);
-                TextBox_Preco1AOE.Text = preco1Value.ToString("F2").Replace(".", ",");
-                TextBox_Preco2AOE.Text = preco2Value.ToString("F2").Replace(".", ",");
+                // Convert from Brazilian format to editable format
+                TextBox_Preco1AOE.Text = FormatToEditablePrice(produtoSelecionado.Preco1);
+                TextBox_Preco2AOE.Text = FormatToEditablePrice(produtoSelecionado.Preco2);
                 switch (produtoSelecionado.COB)
                 {
                     case true:
@@ -151,13 +149,13 @@ namespace GertecServer
             }
 
             // Validate price format
-            if (!decimal.TryParse(TextBox_Preco1AOE.Text.Replace(".", "").Replace(",", "."), System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.InvariantCulture, out decimal preco1))
+            if (!TryParseUserInputPrice(TextBox_Preco1AOE.Text, out decimal preco1))
             {
                 MessageBox.Show("Formato inválido para Preço 1. Use o formato: 0,00", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            if (!decimal.TryParse(TextBox_Preco2AOE.Text.Replace(".", "").Replace(",", "."), System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.InvariantCulture, out decimal preco2))
+            if (!TryParseUserInputPrice(TextBox_Preco2AOE.Text, out decimal preco2))
             {
                 MessageBox.Show("Formato inválido para Preço 2. Use o formato: 0,00", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -243,11 +241,9 @@ namespace GertecServer
                 TextBox_CodigoAOE.Text = produtoSelecionado.Codigo;
                 TextBox_CodigoAOE.IsEnabled = false;
                 TextBox_CodigoBarrasAOE.Text = produtoSelecionado.CodBarra;
-                // Convert from Brazilian format to editable format (e.g., "R$ 1.234,56" -> "1234,56")
-                decimal preco1Value = ParseBrazilianCurrency(produtoSelecionado.Preco1);
-                decimal preco2Value = ParseBrazilianCurrency(produtoSelecionado.Preco2);
-                TextBox_Preco1AOE.Text = preco1Value.ToString("F2").Replace(".", ",");
-                TextBox_Preco2AOE.Text = preco2Value.ToString("F2").Replace(".", ",");
+                // Convert from Brazilian format to editable format
+                TextBox_Preco1AOE.Text = FormatToEditablePrice(produtoSelecionado.Preco1);
+                TextBox_Preco2AOE.Text = FormatToEditablePrice(produtoSelecionado.Preco2);
                 switch (produtoSelecionado.COB)
                 {
                     case true:
@@ -379,7 +375,7 @@ namespace GertecServer
             }
             if (Chip_Preco1.IsChecked == true)
             {
-                if (!decimal.TryParse(TextBox_Preco1Filtro.Text.Replace(".", "").Replace(",", "."), System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.InvariantCulture, out decimal preco1Filtro))
+                if (!TryParseUserInputPrice(TextBox_Preco1Filtro.Text, out decimal preco1Filtro))
                 {
                     MessageBox.Show("Formato inválido para Preço 1. Use o formato: 0,00", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
@@ -389,7 +385,7 @@ namespace GertecServer
             }
             if (Cihp_Preco2.IsChecked == true)
             {
-                if (!decimal.TryParse(TextBox_Preco2Filtro.Text.Replace(".", "").Replace(",", "."), System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.InvariantCulture, out decimal preco2Filtro))
+                if (!TryParseUserInputPrice(TextBox_Preco2Filtro.Text, out decimal preco2Filtro))
                 {
                     MessageBox.Show("Formato inválido para Preço 2. Use o formato: 0,00", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
@@ -472,11 +468,9 @@ namespace GertecServer
                 TextBox_CodigoAOE.Text = produtoSelecionado.Codigo;
                 TextBox_CodigoAOE.IsEnabled = false;
                 TextBox_CodigoBarrasAOE.Text = produtoSelecionado.CodBarra;
-                // Convert from Brazilian format to editable format (e.g., "R$ 1.234,56" -> "1234,56")
-                decimal preco1Value = ParseBrazilianCurrency(produtoSelecionado.Preco1);
-                decimal preco2Value = ParseBrazilianCurrency(produtoSelecionado.Preco2);
-                TextBox_Preco1AOE.Text = preco1Value.ToString("F2").Replace(".", ",");
-                TextBox_Preco2AOE.Text = preco2Value.ToString("F2").Replace(".", ",");
+                // Convert from Brazilian format to editable format
+                TextBox_Preco1AOE.Text = FormatToEditablePrice(produtoSelecionado.Preco1);
+                TextBox_Preco2AOE.Text = FormatToEditablePrice(produtoSelecionado.Preco2);
                 switch (produtoSelecionado.COB)
                 {
                     case true:
@@ -563,6 +557,20 @@ namespace GertecServer
             {
                 throw new FormatException($"Erro ao converter preço '{value}': {ex.Message}", ex);
             }
+        }
+
+        // Try parse user input price (handles both comma and period as decimal separators)
+        private bool TryParseUserInputPrice(string input, out decimal result)
+        {
+            string cleanValue = input.Replace(".", "").Replace(",", ".");
+            return decimal.TryParse(cleanValue, System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.InvariantCulture, out result);
+        }
+
+        // Convert Brazilian format to editable format for text boxes
+        private string FormatToEditablePrice(string brazilianPrice)
+        {
+            decimal value = ParseBrazilianCurrency(brazilianPrice);
+            return value.ToString("F2").Replace(".", ",");
         }
 
         // Convert from import format (0.00) to Brazilian format
