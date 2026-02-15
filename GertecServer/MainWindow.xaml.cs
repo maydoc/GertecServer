@@ -107,9 +107,11 @@ namespace GertecServer
                 TextBox_CodigoAOE.Text = produtoSelecionado.Codigo;
                 TextBox_CodigoAOE.IsEnabled = false;
                 TextBox_CodigoBarrasAOE.Text = produtoSelecionado.CodBarra;
-                // Remove "R$ " prefix for editing
-                TextBox_Preco1AOE.Text = produtoSelecionado.Preco1.Replace("R$", "").Trim();
-                TextBox_Preco2AOE.Text = produtoSelecionado.Preco2.Replace("R$", "").Trim();
+                // Convert from Brazilian format to editable format (e.g., "R$ 1.234,56" -> "1234,56")
+                decimal preco1Value = ParseBrazilianCurrency(produtoSelecionado.Preco1);
+                decimal preco2Value = ParseBrazilianCurrency(produtoSelecionado.Preco2);
+                TextBox_Preco1AOE.Text = preco1Value.ToString("F2").Replace(".", ",");
+                TextBox_Preco2AOE.Text = preco2Value.ToString("F2").Replace(".", ",");
                 switch (produtoSelecionado.COB)
                 {
                     case true:
@@ -147,6 +149,19 @@ namespace GertecServer
                 MessageBox.Show("Por favor, preencha todos os campos.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
+
+            // Validate price format
+            if (!decimal.TryParse(TextBox_Preco1AOE.Text.Replace(".", "").Replace(",", "."), System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.InvariantCulture, out decimal preco1))
+            {
+                MessageBox.Show("Formato inválido para Preço 1. Use o formato: 0,00", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if (!decimal.TryParse(TextBox_Preco2AOE.Text.Replace(".", "").Replace(",", "."), System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.InvariantCulture, out decimal preco2))
+            {
+                MessageBox.Show("Formato inválido para Preço 2. Use o formato: 0,00", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
             else
             {
 
@@ -164,8 +179,8 @@ namespace GertecServer
                         command.Parameters.AddWithValue("@Codigo", TextBox_CodigoAOE.Text);
                         command.Parameters.AddWithValue("@CodigoBarras", TextBox_CodigoBarrasAOE.Text);
                         command.Parameters.AddWithValue("@Descricao", TextBox_DescricaoAOE.Text);
-                        command.Parameters.AddWithValue("@Preco1", FormatToBrazilianCurrency(decimal.Parse(TextBox_Preco1AOE.Text)));
-                        command.Parameters.AddWithValue("@Preco2", FormatToBrazilianCurrency(decimal.Parse(TextBox_Preco2AOE.Text)));
+                        command.Parameters.AddWithValue("@Preco1", FormatToBrazilianCurrency(preco1));
+                        command.Parameters.AddWithValue("@Preco2", FormatToBrazilianCurrency(preco2));
                         command.Parameters.AddWithValue("@COB", Obter_BoolCOBInt(false));
                         switch (Obter_BoolCOBInt(false))
                         {
@@ -194,8 +209,8 @@ namespace GertecServer
                         command1.Parameters.AddWithValue("@Codigo", TextBox_CodigoAOE.Text);
                         command1.Parameters.AddWithValue("@CodigoBarras", TextBox_CodigoBarrasAOE.Text);
                         command1.Parameters.AddWithValue("@Descricao", TextBox_DescricaoAOE.Text);
-                        command1.Parameters.AddWithValue("@Preco1", FormatToBrazilianCurrency(decimal.Parse(TextBox_Preco1AOE.Text)));
-                        command1.Parameters.AddWithValue("@Preco2", FormatToBrazilianCurrency(decimal.Parse(TextBox_Preco2AOE.Text)));
+                        command1.Parameters.AddWithValue("@Preco1", FormatToBrazilianCurrency(preco1));
+                        command1.Parameters.AddWithValue("@Preco2", FormatToBrazilianCurrency(preco2));
                         command1.Parameters.AddWithValue("@COB", Obter_BoolCOBInt(false));
                         switch (Obter_BoolCOBInt(false))
                         {
@@ -228,9 +243,11 @@ namespace GertecServer
                 TextBox_CodigoAOE.Text = produtoSelecionado.Codigo;
                 TextBox_CodigoAOE.IsEnabled = false;
                 TextBox_CodigoBarrasAOE.Text = produtoSelecionado.CodBarra;
-                // Remove "R$ " prefix for editing
-                TextBox_Preco1AOE.Text = produtoSelecionado.Preco1.Replace("R$", "").Trim();
-                TextBox_Preco2AOE.Text = produtoSelecionado.Preco2.Replace("R$", "").Trim();
+                // Convert from Brazilian format to editable format (e.g., "R$ 1.234,56" -> "1234,56")
+                decimal preco1Value = ParseBrazilianCurrency(produtoSelecionado.Preco1);
+                decimal preco2Value = ParseBrazilianCurrency(produtoSelecionado.Preco2);
+                TextBox_Preco1AOE.Text = preco1Value.ToString("F2").Replace(".", ",");
+                TextBox_Preco2AOE.Text = preco2Value.ToString("F2").Replace(".", ",");
                 switch (produtoSelecionado.COB)
                 {
                     case true:
@@ -362,13 +379,23 @@ namespace GertecServer
             }
             if (Chip_Preco1.IsChecked == true)
             {
+                if (!decimal.TryParse(TextBox_Preco1Filtro.Text.Replace(".", "").Replace(",", "."), System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.InvariantCulture, out decimal preco1Filtro))
+                {
+                    MessageBox.Show("Formato inválido para Preço 1. Use o formato: 0,00", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
                 if (filter.Length > 0) filter.Append(" AND ");
-                filter.Append($"Preco1 = '{FormatToBrazilianCurrency(decimal.Parse(TextBox_Preco1Filtro.Text))}'");
+                filter.Append($"Preco1 = '{FormatToBrazilianCurrency(preco1Filtro)}'");
             }
             if (Cihp_Preco2.IsChecked == true)
             {
+                if (!decimal.TryParse(TextBox_Preco2Filtro.Text.Replace(".", "").Replace(",", "."), System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.InvariantCulture, out decimal preco2Filtro))
+                {
+                    MessageBox.Show("Formato inválido para Preço 2. Use o formato: 0,00", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
                 if (filter.Length > 0) filter.Append(" AND ");
-                filter.Append($"Preco2 = '{FormatToBrazilianCurrency(decimal.Parse(TextBox_Preco2Filtro.Text))}'");
+                filter.Append($"Preco2 = '{FormatToBrazilianCurrency(preco2Filtro)}'");
             }
             if (Chip_COB.IsChecked == true)
             {
@@ -445,9 +472,11 @@ namespace GertecServer
                 TextBox_CodigoAOE.Text = produtoSelecionado.Codigo;
                 TextBox_CodigoAOE.IsEnabled = false;
                 TextBox_CodigoBarrasAOE.Text = produtoSelecionado.CodBarra;
-                // Remove "R$ " prefix for editing
-                TextBox_Preco1AOE.Text = produtoSelecionado.Preco1.Replace("R$", "").Trim();
-                TextBox_Preco2AOE.Text = produtoSelecionado.Preco2.Replace("R$", "").Trim();
+                // Convert from Brazilian format to editable format (e.g., "R$ 1.234,56" -> "1234,56")
+                decimal preco1Value = ParseBrazilianCurrency(produtoSelecionado.Preco1);
+                decimal preco2Value = ParseBrazilianCurrency(produtoSelecionado.Preco2);
+                TextBox_Preco1AOE.Text = preco1Value.ToString("F2").Replace(".", ",");
+                TextBox_Preco2AOE.Text = preco2Value.ToString("F2").Replace(".", ",");
                 switch (produtoSelecionado.COB)
                 {
                     case true:
@@ -518,11 +547,22 @@ namespace GertecServer
         // Convert from Brazilian format to decimal
         private decimal ParseBrazilianCurrency(string value)
         {
-            // Remove "R$", spaces, and thousand separators (.)
-            string cleanValue = value.Replace("R$", "").Replace(" ", "").Replace(".", "").Trim();
-            // Replace comma with period for decimal separator
-            cleanValue = cleanValue.Replace(",", ".");
-            return decimal.Parse(cleanValue, System.Globalization.CultureInfo.InvariantCulture);
+            try
+            {
+                // Remove "R$", spaces, and thousand separators (.)
+                string cleanValue = value.Replace("R$", "").Replace(" ", "").Replace(".", "").Trim();
+                // Replace comma with period for decimal separator
+                cleanValue = cleanValue.Replace(",", ".");
+                if (decimal.TryParse(cleanValue, System.Globalization.NumberStyles.Number, System.Globalization.CultureInfo.InvariantCulture, out decimal result))
+                {
+                    return result;
+                }
+                throw new FormatException($"Não foi possível converter '{value}' para decimal.");
+            }
+            catch (Exception ex)
+            {
+                throw new FormatException($"Erro ao converter preço '{value}': {ex.Message}", ex);
+            }
         }
 
         // Convert from import format (0.00) to Brazilian format
